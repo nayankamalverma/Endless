@@ -1,4 +1,4 @@
-namespace StateMachine
+namespace Assets.Scripts.Utilities
 {
     public abstract class IState<T>
     {
