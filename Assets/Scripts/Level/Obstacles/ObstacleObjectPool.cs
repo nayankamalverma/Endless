@@ -1,6 +1,8 @@
-﻿namespace Assets.Scripts.Level
+﻿using Assets.Scripts.Utilities;
+
+namespace Assets.Scripts.Level
 {
-    public class ObstacleObjectPool
+    public class ObstacleObjectPool : ObjectPool
     {
         
     }

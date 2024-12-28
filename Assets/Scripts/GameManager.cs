@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Assets.Scripts.Level;
-using Assets.Scripts.Obstacles;
 using UnityEngine;
 
 namespace Assets.Scripts
@@ -9,9 +8,8 @@ namespace Assets.Scripts
     {
         //LevelService
         [SerializeField] private Transform leftBuildingSpawnPos;
-        [SerializeField] private Transform leftBuildingDestroyPos;
         [SerializeField] private Transform rightBuildingSpawnPos;
-        [SerializeField] private Transform rightBuildingDestroyPos;
+        [SerializeField] private Transform buildingDestroy;
         [SerializeField] private GameObject buildingPrefab;
         [SerializeField] private List<Transform> initialLeftBuildingSpawn;
         [SerializeField] private List<Transform> initialRightBuildingSpawn;
@@ -22,12 +20,12 @@ namespace Assets.Scripts
 
         private void Start()
         {
-            if(leftBuildingSpawnPos == null || leftBuildingDestroyPos == null || rightBuildingSpawnPos == null || rightBuildingDestroyPos == null || buildingPrefab == null || initialLeftBuildingSpawn == null || initialRightBuildingSpawn == null || buildingController == null)
+            if(leftBuildingSpawnPos == null || rightBuildingSpawnPos == null || buildingDestroy == null || buildingPrefab == null || initialLeftBuildingSpawn == null || initialRightBuildingSpawn == null || buildingController == null)
             {
                 Debug.LogError("Missing references in GameManager");
                 return;
             }
-            LevelService = new LevelService(buildingController, initialLeftBuildingSpawn, initialRightBuildingSpawn,leftBuildingSpawnPos, leftBuildingDestroyPos, rightBuildingSpawnPos, rightBuildingDestroyPos, buildingPrefab);
+            LevelService = new LevelService(buildingController, initialLeftBuildingSpawn, initialRightBuildingSpawn,leftBuildingSpawnPos, rightBuildingSpawnPos, buildingDestroy, buildingPrefab);
         }
 
     }

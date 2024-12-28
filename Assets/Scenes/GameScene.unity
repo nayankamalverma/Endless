@@ -1013,6 +1013,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 695dcdbac6281c540b694755a73912e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initMoveSpeed: 2
+  speedIncreaseRate: 0.01
+  isPaused: 0
 --- !u!1001 &823684321
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1083,37 +1086,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2935213427021107334, guid: 4ef85dc2c648dd6488c5cc44bbbab848, type: 3}
   m_PrefabInstance: {fileID: 682545679}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1002982478
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1002982479}
-  m_Layer: 0
-  m_Name: RightBuildingDestroy
-  m_TagString: Untagged
-  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1002982479
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1002982478}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -26, y: 2.5, z: -6.02}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1027810994}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1027810993
 GameObject:
   m_ObjectHideFlags: 0
@@ -1148,9 +1120,8 @@ Transform:
   - {fileID: 2063513491}
   - {fileID: 1579967561}
   - {fileID: 1465156004}
-  - {fileID: 1566019335}
   - {fileID: 309456927}
-  - {fileID: 1002982479}
+  - {fileID: 1566019335}
   - {fileID: 1980712830}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1167,9 +1138,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   leftBuildingSpawnPos: {fileID: 1465156004}
-  leftBuildingDestroyPos: {fileID: 1566019335}
   rightBuildingSpawnPos: {fileID: 309456927}
-  rightBuildingDestroyPos: {fileID: 1002982479}
+  buildingDestroy: {fileID: 1566019335}
   buildingPrefab: {fileID: 5393588401525918065, guid: 4ef85dc2c648dd6488c5cc44bbbab848, type: 3}
   initialLeftBuildingSpawn:
   - {fileID: 103787698}
@@ -1491,7 +1461,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1566019335}
   m_Layer: 0
-  m_Name: LeftBuildingDestroy
+  m_Name: BuildingDestroy
   m_TagString: Untagged
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -1505,13 +1475,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1566019334}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -26, y: 2.5, z: 6}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: -26, y: 2.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1027810994}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &1579967560
 GameObject:
   m_ObjectHideFlags: 0

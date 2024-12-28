@@ -7,17 +7,20 @@ namespace Assets.Scripts.Level
     {
         private GameObject buildingPrefab;
         private Transform leftBuildingSpawnPos;
-        private Transform leftBuildingDestroyPos;
         private Transform rightBuildingSpawnPos;
-        private Transform rightBuildingDestroyPos;
+        private Transform buildingDestroyPos;
         private List<Transform> initialLeftBuildingSpawn;
         private List<Transform> initialRightBuildingSpawn;
+        [SerializeField] private float initMoveSpeed = 0.2f;
+        [SerializeField] private float speedIncreaseRate = 0.01f;
+        [SerializeField] private bool isPaused;
 
+        private float moveSpeed;
         BuildingObjectPool buildingObjectPool;
 
-        public void SetReferences(GameObject buildingPrefab, List<Transform> initialLeftBuildingSpawn, List<Transform> initialRightBuildingSpawn, Transform leftBuildingSpawnPos, Transform leftBuildingDestroyPos, Transform rightBuildingSpawnPos, Transform rightBuildingDestroyPos)
+        public void SetReferences(GameObject buildingPrefab, List<Transform> initialLeftBuildingSpawn, List<Transform> initialRightBuildingSpawn, Transform leftBuildingSpawnPos, Transform rightBuildingSpawnPos, Transform buildingDestroyPos)
         {
-            if (leftBuildingSpawnPos == null || leftBuildingDestroyPos == null || rightBuildingSpawnPos == null || rightBuildingDestroyPos == null || buildingPrefab == null || initialLeftBuildingSpawn == null || initialRightBuildingSpawn == null )
+            if (leftBuildingSpawnPos == null || rightBuildingSpawnPos == null || buildingDestroyPos == null || buildingPrefab == null || initialLeftBuildingSpawn == null || initialRightBuildingSpawn == null )
             {
                 Debug.LogError("Missing references in GameManager 3");
                 return;
@@ -25,9 +28,8 @@ namespace Assets.Scripts.Level
             this.initialLeftBuildingSpawn = initialLeftBuildingSpawn;
             this.initialRightBuildingSpawn = initialRightBuildingSpawn;
             this.leftBuildingSpawnPos = leftBuildingSpawnPos;
-            this.leftBuildingDestroyPos = leftBuildingDestroyPos;
             this.rightBuildingSpawnPos = rightBuildingSpawnPos;
-            this.rightBuildingDestroyPos = rightBuildingDestroyPos;
+            this.buildingDestroyPos = buildingDestroyPos;
             this.buildingPrefab = buildingPrefab;
         }
 
@@ -37,14 +39,46 @@ namespace Assets.Scripts.Level
         }
 
         private void OnEnable()
-        { 
+        {
+            isPaused = false;
+            moveSpeed = initMoveSpeed;
             SpawnInitialBuilding();
         }
 
 
         private void Update()
         {
-            
+            if (!isPaused) {
+                MoveBuildings();
+                IncreaseSpeedOverTime();
+            }
+        }
+
+        private void MoveBuildings()
+        {
+            foreach (var pooledItem in buildingObjectPool.pooledItems)
+            {
+                var building = pooledItem.item;
+                if (building.activeSelf)
+                {
+                    Vector3 targetPosition = building.transform.position + (Vector3.left * moveSpeed * Time.deltaTime);
+
+                    building.transform.position = Vector3.Lerp(building.transform.position, targetPosition, 0.5f);
+
+                    if (building.transform.position.x <= buildingDestroyPos.position.x )
+                    {
+                        buildingObjectPool.ReturnItem(pooledItem);
+                        if( building.transform.position.z == leftBuildingSpawnPos.position.z) ConfigureBuilding(buildingObjectPool.GetBuilding(), leftBuildingSpawnPos);
+                        else ConfigureBuilding(buildingObjectPool.GetBuilding(), rightBuildingSpawnPos);
+
+                    }
+                }
+            }
+        }
+
+        private void IncreaseSpeedOverTime()
+        {
+            moveSpeed += speedIncreaseRate * Time.deltaTime;
         }
 
 

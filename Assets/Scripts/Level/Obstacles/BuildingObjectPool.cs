@@ -19,7 +19,7 @@ namespace Assets.Scripts.Level
 
         protected override GameObject CreateItem()
         {
-            return GameObject.Instantiate(buildingPrefab);
+            return GameObject.Instantiate(buildingPrefab,buildingController.gameObject.transform);
         }
     }
 }
