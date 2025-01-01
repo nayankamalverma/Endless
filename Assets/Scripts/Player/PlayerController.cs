@@ -1,14 +1,15 @@
-using System;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 
-public class PlayerController : MonoBehaviour
+namespace Assets.Scripts.Player
 {
-    [SerializeField] private CapsuleCollider collider;
-    [SerializeField] private Rigidbody rigidbody;
-    [SerializeField] private float jumpForce;
-    [SerializeField] private Vector3 slideScale;
-    
+
+    public class PlayerController : MonoBehaviour
+    {
+        [SerializeField] private CapsuleCollider collider;
+        [SerializeField] private Rigidbody rigidbody;
+        [SerializeField] private float jumpForce;
+        [SerializeField] private Vector3 slideScale;
+
         public float laneWidth = 2.0f; // Width of each lane
         public float moveSpeed = 10.0f; // Speed of side movement
         private int currentLane = 1; // Current lane (0 = left, 1 = middle, 2 = right)
@@ -56,3 +57,5 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
+}

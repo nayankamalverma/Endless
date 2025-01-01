@@ -38,7 +38,7 @@ namespace Assets.Scripts.Level
             buildingObjectPool = new BuildingObjectPool(buildingPrefab, this);
         }
 
-        private void OnEnable()
+        public void OnGameStart()
         {
             isPaused = false;
             moveSpeed = initMoveSpeed;
@@ -48,6 +48,7 @@ namespace Assets.Scripts.Level
 
         private void Update()
         {
+
             if (!isPaused) {
                 MoveBuildings();
                 IncreaseSpeedOverTime();
@@ -70,7 +71,6 @@ namespace Assets.Scripts.Level
                         buildingObjectPool.ReturnItem(pooledItem);
                         if( building.transform.position.z == leftBuildingSpawnPos.position.z) ConfigureBuilding(buildingObjectPool.GetBuilding(), leftBuildingSpawnPos);
                         else ConfigureBuilding(buildingObjectPool.GetBuilding(), rightBuildingSpawnPos);
-
                     }
                 }
             }
@@ -97,7 +97,12 @@ namespace Assets.Scripts.Level
             item.transform.rotation = spawnPos.rotation;
         }
 
-        private void OnDisable()
+        public void SetIsPaused(bool isPaused)
+        {
+            this.isPaused = isPaused;
+        }
+
+        public void OnGameEnd()
         {
             foreach (var i in buildingObjectPool.pooledItems)
             {
