@@ -20,14 +20,14 @@ namespace Assets.Scripts
         [SerializeField] private BuildingController buildingController;
 
         //PlayerService
-        [SerializeField] private PlayerController playerController;
+       // [SerializeField] private PlayerController playerController;
 
         #endregion
         #region Services
         //services
         private EventService EventService;
         private LevelService LevelService;
-        private PlayerService PlayerService;
+        //private PlayerService PlayerService;
 
         [SerializeField] private UIService UIService;
         #endregion
@@ -36,7 +36,7 @@ namespace Assets.Scripts
         {
             EventService = new EventService();
             LevelService = new LevelService(buildingController, initialLeftBuildingSpawn, initialRightBuildingSpawn,leftBuildingSpawnPos, rightBuildingSpawnPos, buildingDestroy, buildingPrefab);
-            PlayerService = new PlayerService(EventService, playerController);
+            //PlayerService = new PlayerService(EventService, playerController);
 
             UIService.SetServices(EventService);
         }
@@ -44,7 +44,7 @@ namespace Assets.Scripts
         private void OnDestroy()
         {
             LevelService.OnDestroy();
-            PlayerService.OnDestroy();
+           // PlayerService.OnDestroy();
         }
 
     }
