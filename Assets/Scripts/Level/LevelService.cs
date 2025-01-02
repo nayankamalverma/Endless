@@ -15,16 +15,30 @@ public class LevelService
         }
         this.buildingController = buildingController;
         buildingController.SetReferences( buildingPrefab, initialLeftBuildingSpawn, initialRightBuildingSpawn, leftBuildingSpawnPos, rightBuildingSpawnPos, buildingDestroyPos);
-
     }
 
     private void OnGameStart()
     {
-        buildingController.gameObject.SetActive(true);
+        buildingController.OnGameStart();
     }
-    
+
+    private void OnGamePause()
+    {
+        buildingController.SetIsPaused(true);
+    }
+
+    private void OnGameResume()
+    {
+        buildingController.SetIsPaused(false);
+    }
+
     private void OnGameEnd()
     {
-        buildingController.gameObject.SetActive(false);
+        buildingController.OnGameEnd();
+    }
+
+    public void OnDestroy()
+    {
+        
     }
 }
