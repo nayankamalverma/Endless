@@ -13,7 +13,7 @@ namespace Assets.Scripts.Level
         [SerializeField] private float speedIncreaseRate = 0.01f;
         [SerializeField] private bool isPaused;
 
-        private float moveSpeed;
+        [SerializeField]private float moveSpeed;
         BuildingObjectPool buildingObjectPool;
 
         public void SetReferences(GameObject buildingPrefab, Transform buildingSpawnPos, Transform buildingDestroyPos)
@@ -67,7 +67,7 @@ namespace Assets.Scripts.Level
 
         private void IncreaseSpeedOverTime()
         {
-            moveSpeed += speedIncreaseRate * Time.deltaTime;
+            if(moveSpeed<60)moveSpeed += speedIncreaseRate * Time.deltaTime;
         }
 
 

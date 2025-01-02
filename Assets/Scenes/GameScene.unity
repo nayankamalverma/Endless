@@ -506,8 +506,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initialBuildingCount: 12
   initMoveSpeed: 4
-  speedIncreaseRate: 0.01
+  speedIncreaseRate: 0.05
   isPaused: 1
+  moveSpeed: 0
 --- !u!1 &1027810993
 GameObject:
   m_ObjectHideFlags: 0
