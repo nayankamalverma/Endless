@@ -6,15 +6,10 @@ public class LevelService
 {
     private BuildingController buildingController;
 
-    public LevelService(BuildingController buildingController, List<Transform> initialLeftBuildingSpawn, List<Transform> initialRightBuildingSpawn,Transform leftBuildingSpawnPos, Transform rightBuildingSpawnPos, Transform buildingDestroyPos, GameObject buildingPrefab)
+    public LevelService(BuildingController buildingController,GameObject buildingPrefab, Transform buildingSpawnPos, Transform buildingDestroyPos)
     {
-        if (leftBuildingSpawnPos == null || rightBuildingSpawnPos == null || buildingDestroyPos == null || buildingPrefab == null || initialLeftBuildingSpawn == null || initialRightBuildingSpawn == null || buildingController == null)
-        {
-            Debug.LogError("Missing references in GameManager 2");
-            return;
-        }
         this.buildingController = buildingController;
-        buildingController.SetReferences( buildingPrefab, initialLeftBuildingSpawn, initialRightBuildingSpawn, leftBuildingSpawnPos, rightBuildingSpawnPos, buildingDestroyPos);
+        buildingController.SetReferences( buildingPrefab, buildingSpawnPos, buildingDestroyPos);
     }
 
     private void OnGameStart()
