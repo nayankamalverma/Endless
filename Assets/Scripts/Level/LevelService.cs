@@ -1,3 +1,4 @@
+using Assets.Scripts.Events;
 using Assets.Scripts.Level;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,16 +6,24 @@ using UnityEngine;
 public class LevelService
 {
     private BuildingController buildingController;
+    private ObstaclesController obstaclesController;
+    private EventService eventService;
 
-    public LevelService(BuildingController buildingController, List<Transform> initialLeftBuildingSpawn, List<Transform> initialRightBuildingSpawn,Transform leftBuildingSpawnPos, Transform rightBuildingSpawnPos, Transform buildingDestroyPos, GameObject buildingPrefab)
+    public LevelService( EventService eventService,BuildingController buildingController ,GameObject buildingPrefab, Transform buildingSpawnPos, Transform buildingDestroyPos, ObstaclesController obstaclesController)
     {
-        if (leftBuildingSpawnPos == null || rightBuildingSpawnPos == null || buildingDestroyPos == null || buildingPrefab == null || initialLeftBuildingSpawn == null || initialRightBuildingSpawn == null || buildingController == null)
-        {
-            Debug.LogError("Missing references in GameManager 2");
-            return;
-        }
+        this.eventService = eventService;
         this.buildingController = buildingController;
-        buildingController.SetReferences( buildingPrefab, initialLeftBuildingSpawn, initialRightBuildingSpawn, leftBuildingSpawnPos, rightBuildingSpawnPos, buildingDestroyPos);
+        this.obstaclesController = obstaclesController;
+        buildingController.SetReferences( buildingPrefab, buildingSpawnPos, buildingDestroyPos);
+        AddEventListeners();
+    }
+
+    private void AddEventListeners()
+    {
+        eventService.OnGameStart.AddListener(OnGameStart);
+        eventService.OnGamePause.AddListener(OnGamePause);
+        eventService.OnGameResume.AddListener(OnGameResume);
+        eventService.OnMainMenuButtonClicked.AddListener(OnMainMenuButtonClicked);
     }
 
     private void OnGameStart()
@@ -34,11 +43,16 @@ public class LevelService
 
     private void OnGameEnd()
     {
-        buildingController.OnGameEnd();
+        //buildingController.OnGameOver();
+    }
+
+    private void OnMainMenuButtonClicked()
+    {
+        buildingController.OnMainMenuButtonClicked();
     }
 
     public void OnDestroy()
     {
-        
+        eventService.OnGameStart.RemoveListener(OnGameStart);
     }
 }

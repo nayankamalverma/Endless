@@ -43,10 +43,19 @@ namespace Assets.Scripts.Utilities
             item.isUsed = false;
 		}
 
-        public class PooledItem
-		{
+		public void ReturnAllItem()
+        {
+            foreach (var item in pooledItems)
+            {
+                item.item.SetActive(false);
+                item.isUsed = false;
+            }
+        }
+
+    }
+	public class PooledItem
+	{
 			public GameObject item;
 			public bool isUsed;
-		}
 	}
 }

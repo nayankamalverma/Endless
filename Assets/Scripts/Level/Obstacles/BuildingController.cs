@@ -6,29 +6,19 @@ namespace Assets.Scripts.Level
     public class BuildingController : MonoBehaviour
     {
         private GameObject buildingPrefab;
-        private Transform leftBuildingSpawnPos;
-        private Transform rightBuildingSpawnPos;
+        private Transform buildingSpawnPos;
         private Transform buildingDestroyPos;
-        private List<Transform> initialLeftBuildingSpawn;
-        private List<Transform> initialRightBuildingSpawn;
+        [SerializeField] private int initialBuildingCount=8;
         [SerializeField] private float initMoveSpeed = 0.2f;
         [SerializeField] private float speedIncreaseRate = 0.01f;
         [SerializeField] private bool isPaused;
 
-        private float moveSpeed;
+        [SerializeField]private float moveSpeed;
         BuildingObjectPool buildingObjectPool;
 
-        public void SetReferences(GameObject buildingPrefab, List<Transform> initialLeftBuildingSpawn, List<Transform> initialRightBuildingSpawn, Transform leftBuildingSpawnPos, Transform rightBuildingSpawnPos, Transform buildingDestroyPos)
+        public void SetReferences(GameObject buildingPrefab, Transform buildingSpawnPos, Transform buildingDestroyPos)
         {
-            if (leftBuildingSpawnPos == null || rightBuildingSpawnPos == null || buildingDestroyPos == null || buildingPrefab == null || initialLeftBuildingSpawn == null || initialRightBuildingSpawn == null )
-            {
-                Debug.LogError("Missing references in GameManager 3");
-                return;
-            }
-            this.initialLeftBuildingSpawn = initialLeftBuildingSpawn;
-            this.initialRightBuildingSpawn = initialRightBuildingSpawn;
-            this.leftBuildingSpawnPos = leftBuildingSpawnPos;
-            this.rightBuildingSpawnPos = rightBuildingSpawnPos;
+            this.buildingSpawnPos = buildingSpawnPos;
             this.buildingDestroyPos = buildingDestroyPos;
             this.buildingPrefab = buildingPrefab;
         }
@@ -36,19 +26,21 @@ namespace Assets.Scripts.Level
         private void Start()
         {
             buildingObjectPool = new BuildingObjectPool(buildingPrefab, this);
+            SpawnInitialBuilding();
+            isPaused = true;
+            moveSpeed = initMoveSpeed;
         }
 
         public void OnGameStart()
         {
+            buildingObjectPool.ReturnAllItem();
+            SpawnInitialBuilding();
             isPaused = false;
             moveSpeed = initMoveSpeed;
-            SpawnInitialBuilding();
         }
-
 
         private void Update()
         {
-
             if (!isPaused) {
                 MoveBuildings();
                 IncreaseSpeedOverTime();
@@ -60,7 +52,7 @@ namespace Assets.Scripts.Level
             foreach (var pooledItem in buildingObjectPool.pooledItems)
             {
                 var building = pooledItem.item;
-                if (building.activeSelf)
+                if (pooledItem.isUsed)
                 {
                     Vector3 targetPosition = building.transform.position + (Vector3.left * moveSpeed * Time.deltaTime);
 
@@ -69,8 +61,7 @@ namespace Assets.Scripts.Level
                     if (building.transform.position.x <= buildingDestroyPos.position.x )
                     {
                         buildingObjectPool.ReturnItem(pooledItem);
-                        if( building.transform.position.z == leftBuildingSpawnPos.position.z) ConfigureBuilding(buildingObjectPool.GetBuilding(), leftBuildingSpawnPos);
-                        else ConfigureBuilding(buildingObjectPool.GetBuilding(), rightBuildingSpawnPos);
+                        ConfigureBuilding(buildingObjectPool.GetBuilding(), buildingSpawnPos);
                     }
                 }
             }
@@ -78,16 +69,17 @@ namespace Assets.Scripts.Level
 
         private void IncreaseSpeedOverTime()
         {
-            moveSpeed += speedIncreaseRate * Time.deltaTime;
+            if(moveSpeed<60)moveSpeed += speedIncreaseRate * Time.deltaTime;
         }
 
 
         private void SpawnInitialBuilding()
         {
-            for (int i = 0; i < initialLeftBuildingSpawn.Count; i++)
+            buildingSpawnPos.position = Vector3.zero;
+            for (int i = 0; i < initialBuildingCount ; i++)
             {
-                ConfigureBuilding(buildingObjectPool.GetBuilding(), initialLeftBuildingSpawn[i] );
-                ConfigureBuilding(buildingObjectPool.GetBuilding(), initialRightBuildingSpawn[i] );
+                if(i!=0)buildingSpawnPos.position = new Vector3(buildingSpawnPos.position.x+10, buildingSpawnPos.position.y,buildingSpawnPos.position.z );
+                ConfigureBuilding(buildingObjectPool.GetItem(), buildingSpawnPos);
             }
         }
 
@@ -102,12 +94,12 @@ namespace Assets.Scripts.Level
             this.isPaused = isPaused;
         }
 
-        public void OnGameEnd()
+        public void OnMainMenuButtonClicked()
         {
-            foreach (var i in buildingObjectPool.pooledItems)
-            {
-                buildingObjectPool.ReturnItem(i);
-            }
+            isPaused = true;
+            buildingObjectPool.ReturnAllItem();
+            SpawnInitialBuilding();
         }
+
     }
 }
