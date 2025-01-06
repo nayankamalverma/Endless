@@ -27,15 +27,17 @@ namespace Assets.Scripts.Level
         {
             buildingObjectPool = new BuildingObjectPool(buildingPrefab, this);
             SpawnInitialBuilding();
+            isPaused = true;
             moveSpeed = initMoveSpeed;
         }
 
         public void OnGameStart()
         {
+            buildingObjectPool.ReturnAllItem();
+            SpawnInitialBuilding();
             isPaused = false;
             moveSpeed = initMoveSpeed;
         }
-
 
         private void Update()
         {
@@ -73,6 +75,7 @@ namespace Assets.Scripts.Level
 
         private void SpawnInitialBuilding()
         {
+            buildingSpawnPos.position = Vector3.zero;
             for (int i = 0; i < initialBuildingCount ; i++)
             {
                 if(i!=0)buildingSpawnPos.position = new Vector3(buildingSpawnPos.position.x+10, buildingSpawnPos.position.y,buildingSpawnPos.position.z );
@@ -91,12 +94,12 @@ namespace Assets.Scripts.Level
             this.isPaused = isPaused;
         }
 
-        public void OnGameEnd()
+        public void OnMainMenuButtonClicked()
         {
-            foreach (var i in buildingObjectPool.pooledItems)
-            {
-                buildingObjectPool.ReturnItem(i);
-            }
+            isPaused = true;
+            buildingObjectPool.ReturnAllItem();
+            SpawnInitialBuilding();
         }
+
     }
 }
