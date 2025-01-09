@@ -1,61 +1,103 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Assets.Scripts.Player
 {
-
     public class PlayerController : MonoBehaviour
     {
         [SerializeField] private CapsuleCollider collider;
         [SerializeField] private Rigidbody rigidbody;
         [SerializeField] private float jumpForce;
-        [SerializeField] private Vector3 slideScale;
+        [SerializeField] private float slideCollideHight;
+        //[SerializeField] private Animator animator;
+        [SerializeField] private Vector3 spawnPosition;
 
-        public float laneWidth = 2.0f; // Width of each lane
-        public float moveSpeed = 10.0f; // Speed of side movement
-        private int currentLane = 1; // Current lane (0 = left, 1 = middle, 2 = right)
-        public float verticalSpeed = 10.0f; // Speed of vertical movement
+        [SerializeField] private float laneWidth = 2.0f; 
+        private int currentLane = 1;
+        public bool isActive;
 
-        private void Start()
+        public void ResetPlayer()
         {
             currentLane = 1;
+            transform.position = spawnPosition;
+            //animator.SetBool("running",false);
         }
 
-        void Update()
+
+        public void OnGameStart()
         {
-            // Handle input for lane change
-            float horizontalInput = Input.GetAxis("Horizontal");
-            float verticalInput = Input.GetAxis("Vertical");
-
-            // Change lane based on horizontal input
-            if (horizontalInput < 0 && currentLane > 0)
-            {
-                ChangeLane(-1);
-            }
-            else if (horizontalInput > 0 && currentLane < 2)
-            {
-                ChangeLane(1);
-            }
-
-            // Move vertically based on vertical input
-            Vector3 verticalMovement = new Vector3(0, verticalInput * verticalSpeed * Time.deltaTime, 0);
-            transform.Translate(verticalMovement);
+            isActive = true;
+            ResetPlayer();
+            //animator.SetBool("running", true) ;
         }
 
-        void ChangeLane(int direction)
+
+        private bool IsGrounded()
         {
-            currentLane += direction;
-            Vector3 targetPosition = new Vector3(currentLane * laneWidth, transform.position.y, transform.position.z);
-            StartCoroutine(MoveToPosition(targetPosition));
+            return Physics.Raycast(transform.position, Vector3.down, collider.bounds.extents.y + 0.1f);
         }
 
-        System.Collections.IEnumerator MoveToPosition(Vector3 target)
+        public void Jump(InputAction.CallbackContext context)
         {
-            while (transform.position.x != target.x)
+
+            if (context.performed && isActive )
             {
-                transform.position = Vector3.MoveTowards(transform.position, target, moveSpeed * Time.deltaTime);
-                yield return null;
+                Debug.Log("jump");
+                rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+               // animator.SetTrigger("jump");
             }
         }
+
+        public void Slide(InputAction.CallbackContext context)
+        {
+            if (context.performed && isActive)
+            {
+                StartCoroutine(SlideCoroutine());
+            }
+        }
+
+        //needed to remove corotuine when animation is fixed 
+        private IEnumerator SlideCoroutine()
+        {
+            // Save the original collider properties
+            float originalHeight = collider.height;
+            Vector3 originalCenter = collider.center;
+
+            // Reduce the height of the collider for sliding
+            collider.height = slideCollideHight;
+            collider.center = new Vector3(0,slideCollideHight/2+0.024f,0);
+
+            //animator.SetTrigger("slide"); // Trigger the sliding animation
+
+            // Wait for the duration of the slide
+            
+            yield return new WaitForSeconds(1.0f);
+
+            // Reset the collider properties 
+            collider.height = originalHeight;
+            collider.center = originalCenter;
+        }
+
+        public void GoLeft(InputAction.CallbackContext context)
+        {
+            if (context.performed && isActive)ChangeLane(-1);
+        }
+        public void GoRight(InputAction.CallbackContext context)
+        {
+            if (context.performed && isActive)ChangeLane(1);
+        }
+
+        private void ChangeLane(int index)
+        {
+            int newLane = currentLane + index;
+            if (newLane < 0 || newLane > 2) return;
+            currentLane = newLane;
+            float z = (1 - currentLane) * laneWidth; // Center lane (1) is 0, left (0) is positive, right (2) is negative
+            transform.position = new Vector3(-4, 0, z);
+        }
+
+
     }
 
 }

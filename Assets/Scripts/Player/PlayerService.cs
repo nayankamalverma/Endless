@@ -1,6 +1,6 @@
 ﻿
 using Assets.Scripts.Events;
-using Unity.VisualScripting;
+using UnityEngine;
 
 namespace Assets.Scripts.Player
 {
@@ -13,31 +13,45 @@ namespace Assets.Scripts.Player
         {
             this.eventService = eventService;
             this.playerController = playerController;
+            playerController.isActive = false;
+            AddEventListeners();
+        }
+
+        private void AddEventListeners()
+        {
+            eventService.OnGameStart.AddListener(OnGameStart);
+            eventService.OnGamePause.AddListener(OnGamePause);
+            eventService.OnGameResume.AddListener(OnGameResume);
+            eventService.OnMainMenuButtonClicked.AddListener(OnMainMenuButtonClicked);
         }
 
         private void OnGameStart()
         {
-
+            playerController.OnGameStart();
         }
 
         private void OnGamePause()
         {
-
+            playerController.isActive = false;
         }
 
         private void OnGameResume()
         {
-
+            playerController.isActive = true;
         }
 
-        private void OnGameEnd()
+        private void OnMainMenuButtonClicked()
         {
-
+            playerController.ResetPlayer();
+            playerController.isActive = false;
         }
 
         public void OnDestroy()
         {
-
+            eventService.OnGameStart.RemoveListener(OnGameStart);
+            eventService.OnGamePause.RemoveListener(OnGamePause);
+            eventService.OnGameResume.RemoveListener(OnGameResume);
+            eventService.OnMainMenuButtonClicked?.RemoveListener(OnMainMenuButtonClicked);
         }
     }
 }
