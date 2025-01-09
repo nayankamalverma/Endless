@@ -1,6 +1,5 @@
 using Assets.Scripts.Events;
 using Assets.Scripts.Level;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelService
@@ -39,11 +38,6 @@ public class LevelService
     private void OnGameResume()
     {
         buildingController.SetIsPaused(false);
-    }
-
-    private void OnGameEnd()
-    {
-        //buildingController.OnGameOver();
     }
 
     private void OnMainMenuButtonClicked()
