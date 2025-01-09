@@ -1469,7 +1469,7 @@ MonoBehaviour:
   initialBUildingCount: 10
   buildingSpawnPos: {fileID: 1465156004}
   buildingDestroyPos: {fileID: 1566019335}
-  obstaclesController: {fileID: 0}
+  obstaclesController: {fileID: 1306227776}
   playerController: {fileID: 1980712826}
   UIService: {fileID: 1931951928}
 --- !u!1 &1088688158
