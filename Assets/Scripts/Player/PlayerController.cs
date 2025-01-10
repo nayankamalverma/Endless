@@ -1,3 +1,4 @@
+using Assets.Scripts.Events;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -16,6 +17,12 @@ namespace Assets.Scripts.Player
         [SerializeField] private float laneWidth = 2.0f; 
         private int currentLane = 1;
         public bool isActive;
+        private EventService eventService;
+
+        public void SetService(EventService eventService)
+        {
+            this.eventService = eventService;
+        }
 
         public void ResetPlayer()
         {
@@ -94,9 +101,15 @@ namespace Assets.Scripts.Player
             if (newLane < 0 || newLane > 2) return;
             currentLane = newLane;
             float z = (1 - currentLane) * laneWidth; // Center lane (1) is 0, left (0) is positive, right (2) is negative
-            transform.position = new Vector3(-4, 0, z);
+            rigidbody.MovePosition(new Vector3(-4, transform.position.y, z));
         }
 
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (collision == null) Debug.Log("null");
+            if (collision.gameObject.CompareTag("Obstacle"))
+                eventService.OnGameEnd.Invoke();
+        }
 
     }
 

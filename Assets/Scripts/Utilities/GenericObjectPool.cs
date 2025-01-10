@@ -8,7 +8,7 @@ namespace Assets.Scripts.Utilities
     {
         public List<PooledItem<T>> pooledItems = new List<PooledItem<T>>();
 
-        public virtual GameObject GetItem(T type) 
+        public  GameObject GetItem(T type) 
         {   
             if (pooledItems.Count > 0)
             {
@@ -16,6 +16,7 @@ namespace Assets.Scripts.Utilities
                 if (item != null)
                 {
                     item.isUsed = true;
+                    item.Item.SetActive(true);  
                     return item.Item;
                 }
             }

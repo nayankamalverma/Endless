@@ -13,6 +13,7 @@ namespace Assets.Scripts.Player
         {
             this.eventService = eventService;
             this.playerController = playerController;
+            playerController.SetService(eventService);
             playerController.isActive = false;
             AddEventListeners();
         }
