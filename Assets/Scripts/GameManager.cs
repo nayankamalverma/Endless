@@ -13,7 +13,6 @@ namespace Assets.Scripts
         #region References
         //LevelService
         [SerializeField] private BuildingController buildingController;
-        [SerializeField] private GameObject buildingPrefab;
         [SerializeField] private int initialBUildingCount = 8;
         [SerializeField] private Transform buildingSpawnPos;
         [SerializeField] private Transform buildingDestroyPos;
@@ -38,7 +37,7 @@ namespace Assets.Scripts
         private void Awake()
         {
             EventService = new EventService();
-            LevelService = new LevelService( EventService,buildingController,buildingPrefab, buildingSpawnPos, buildingDestroyPos, obstaclesController);
+            LevelService = new LevelService( EventService,buildingController, buildingSpawnPos, buildingDestroyPos, obstaclesController);
             PlayerService = new PlayerService(EventService, playerController);
 
             UIService.SetServices(EventService);

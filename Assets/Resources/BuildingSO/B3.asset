@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f930548b3fc13c419f937a467145605, type: 3}
-  m_Name: JumpOverBlock
+  m_Script: {fileID: 11500000, guid: 1f2816337adc2cb40b542bbf5771d95e, type: 3}
+  m_Name: B3
   m_EditorClassIdentifier: 
-  obstacleType: 0
-  prefab: {fileID: 8760346993337140461, guid: aec02ccd9bacaa54b8ee8ef61f99d84d, type: 3}
+  buildingType: 2
+  prefab: {fileID: 7846413892721112965, guid: bd0038a546fef6d46b7702f47a75eba0, type: 3}
