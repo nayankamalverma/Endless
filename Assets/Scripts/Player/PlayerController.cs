@@ -18,7 +18,7 @@ namespace Assets.Scripts.Player
 
         [SerializeField] private float laneWidth = 2.0f; 
         private int currentLane = 1;
-        public bool isActive;
+        private bool isActive;
         private EventService eventService;
 
         public void SetService(EventService eventService)
@@ -27,6 +27,7 @@ namespace Assets.Scripts.Player
         }
         private void Awake()
         {
+            isActive = false;
             pos = new Vector3[3];
             pos[1] = spawnPosition;
             pos[0] = new Vector3(transform.position.x, transform.position.y, transform.position.z +laneWidth);
@@ -35,6 +36,7 @@ namespace Assets.Scripts.Player
 
         public void ResetPlayer()
         {
+            isActive = false;
             currentLane = 1;
             transform.position = spawnPosition;
             animator.SetBool("running",false);
@@ -43,9 +45,20 @@ namespace Assets.Scripts.Player
 
         public void OnGameStart()
         {
-            isActive = true;
             ResetPlayer();
+            isActive = true;
             animator.SetBool("running", true) ;
+        }
+
+        public void OnGamePause()
+        {
+            isActive = false;
+            animator.SetBool("running", false);
+        }
+        public void OnGameResume()
+        {
+            isActive = true;
+            animator.SetBool("running", true);
         }
 
 
@@ -125,6 +138,9 @@ namespace Assets.Scripts.Player
                 eventService.OnGameEnd.Invoke();
                 animator.SetBool("running", false);
                 isActive = false;
+            }else if (collision.gameObject.CompareTag("Coins"))
+            {
+                eventService.OnCoinCollected.Invoke();
             }
         }
     }

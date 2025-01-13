@@ -9,7 +9,6 @@ public class GameEndUIController : MonoBehaviour
     [SerializeField] private Button restartButton;
     [SerializeField] private Button MainMenuButton;
     [SerializeField] private TextMeshProUGUI scoreText;
-    [SerializeField] private TextMeshProUGUI highScoreText;
     [SerializeField] private TextMeshProUGUI coinCollectedText;
 
     EventService eventService;
@@ -20,10 +19,25 @@ public class GameEndUIController : MonoBehaviour
         MainMenuButton.onClick.AddListener(OnMainMenuButtonClicked);
     }
 
-
     public void SetService(EventService eventService)
     {
         this.eventService = eventService;
+        AddEventListeners();
+    }
+
+    private void AddEventListeners()
+    {
+        eventService.UpdateCoin.AddListener(UpdateCoins);
+        eventService.UpdateScore.AddListener(UpdateScore);
+    }
+
+    private void UpdateScore(int score)
+    {
+        scoreText.text = "Score : " + score;
+    }
+    private void UpdateCoins(int coins)
+    {
+        coinCollectedText.text = "Coins Collected : " + coins;
     }
 
     private void OnRestartButtonClicked()
@@ -34,5 +48,10 @@ public class GameEndUIController : MonoBehaviour
     private void OnMainMenuButtonClicked()
     {
         eventService.OnMainMenuButtonClicked.Invoke();
+    }
+    private void OnDestroy()
+    {
+        eventService.UpdateCoin.RemoveListener(UpdateCoins);
+        eventService.UpdateScore.RemoveListener(UpdateScore);
     }
 }

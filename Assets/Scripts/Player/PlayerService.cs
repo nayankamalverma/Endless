@@ -14,7 +14,6 @@ namespace Assets.Scripts.Player
             this.eventService = eventService;
             this.playerController = playerController;
             playerController.SetService(eventService);
-            playerController.isActive = false;
             AddEventListeners();
         }
 
@@ -33,18 +32,17 @@ namespace Assets.Scripts.Player
 
         private void OnGamePause()
         {
-            playerController.isActive = false;
+            playerController.OnGamePause();
         }
 
         private void OnGameResume()
         {
-            playerController.isActive = true;
+            playerController.OnGameResume();
         }
 
         private void OnMainMenuButtonClicked()
         {
             playerController.ResetPlayer();
-            playerController.isActive = false;
         }
 
 
