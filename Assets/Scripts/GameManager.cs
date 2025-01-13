@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Assets.Scripts.Collectibles;
 using Assets.Scripts.Events;
 using Assets.Scripts.Level;
 using Assets.Scripts.Player;
@@ -30,6 +31,8 @@ namespace Assets.Scripts
         private PlayerService PlayerService;
 
         [SerializeField] private UIService UIService;
+        [SerializeField] private ScoreService ScoreService;
+        [SerializeField] private CoinService CoinService;
         #endregion
 
         private void Awake()
@@ -39,6 +42,8 @@ namespace Assets.Scripts
             PlayerService = new PlayerService(EventService, playerController);
 
             UIService.SetServices(EventService);
+            ScoreService.SetService(EventService);
+            CoinService.SetService(EventService);
         }
 
         private void OnDestroy()
