@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9fe9832dbe282749bf6d3dc4007b991, type: 3}
+  m_Script: {fileID: 11500000, guid: 7f930548b3fc13c419f937a467145605, type: 3}
   m_Name: Truck
   m_EditorClassIdentifier: 
   obstacleType: 2

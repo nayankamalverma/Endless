@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9fe9832dbe282749bf6d3dc4007b991, type: 3}
-  m_Name: SlideInBlock
+  m_Script: {fileID: 11500000, guid: 1f2816337adc2cb40b542bbf5771d95e, type: 3}
+  m_Name: B2
   m_EditorClassIdentifier: 
-  obstacleType: 1
-  prefab: {fileID: 2654294964988056025, guid: fb88b2113fae9ca4588e4baca0f13861, type: 3}
+  buildingType: 1
+  prefab: {fileID: 7846413892721112965, guid: bd0038a546fef6d46b7702f47a75eba0, type: 3}

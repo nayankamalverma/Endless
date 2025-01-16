@@ -1569,6 +1569,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 695dcdbac6281c540b694755a73912e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buildingsList:
+  - {fileID: 11400000, guid: b22fe3efcdcaa62468abafd4769a8d47, type: 2}
+  - {fileID: 11400000, guid: aeeee49958423934c9d7a0b77a29dbf3, type: 2}
+  - {fileID: 11400000, guid: 0fa62190160f7e04da993cc18f96ae87, type: 2}
   initialBuildingCount: 12
   initMoveSpeed: 4
   speedIncreaseRate: 0.05
@@ -1744,7 +1748,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingController: {fileID: 744487052}
-  buildingPrefab: {fileID: 7846413892721112965, guid: bd0038a546fef6d46b7702f47a75eba0, type: 3}
   initialBUildingCount: 10
   buildingSpawnPos: {fileID: 1465156004}
   buildingDestroyPos: {fileID: 1566019335}
@@ -2344,9 +2347,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   obstaclesList:
-  - {fileID: 11400000, guid: 8d4bda872049b574a96c799514349f4f, type: 2}
-  - {fileID: 11400000, guid: 06fec4aa953480942920828c310999e3, type: 2}
-  - {fileID: 11400000, guid: b5722f5fe84fd24419dbb3539ffea031, type: 2}
+  - {fileID: 11400000, guid: 69e7848ec1f02144b9d9f47195d309a9, type: 2}
+  - {fileID: 11400000, guid: 3f6a1d20b3ea98c42a7bf048c3653eed, type: 2}
+  - {fileID: 11400000, guid: f101807fb75354c49abcffffd850b692, type: 2}
   obstacleSpawnPos: {fileID: 1088688159}
   destroyPos: {fileID: 1566019335}
   initMoveSpeed: 6

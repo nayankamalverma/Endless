@@ -8,12 +8,12 @@ public class LevelService
     private ObstaclesController obstaclesController;
     private EventService eventService;
 
-    public LevelService( EventService eventService,BuildingController buildingController ,GameObject buildingPrefab, Transform buildingSpawnPos, Transform buildingDestroyPos, ObstaclesController obstaclesController)
+    public LevelService( EventService eventService,BuildingController buildingController , Transform buildingSpawnPos, Transform buildingDestroyPos, ObstaclesController obstaclesController)
     {
         this.eventService = eventService;
         this.buildingController = buildingController;
         this.obstaclesController = obstaclesController;
-        buildingController.SetReferences( buildingPrefab, buildingSpawnPos, buildingDestroyPos);
+        buildingController.SetReferences(  buildingSpawnPos, buildingDestroyPos);
         AddEventListeners();
     }
 

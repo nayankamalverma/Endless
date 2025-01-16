@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using Assets.Scripts.Utilities;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Scripts.Level
 {
     public class BuildingController : MonoBehaviour
     {
-        private GameObject buildingPrefab;
+
+        [SerializeField]private List<BuildingScriptableObjects> buildingsList;
         private Transform buildingSpawnPos;
         private Transform buildingDestroyPos;
         [SerializeField] private int initialBuildingCount=8;
@@ -16,16 +18,15 @@ namespace Assets.Scripts.Level
         [SerializeField]private float moveSpeed;
         BuildingObjectPool buildingObjectPool;
 
-        public void SetReferences(GameObject buildingPrefab, Transform buildingSpawnPos, Transform buildingDestroyPos)
+        public void SetReferences( Transform buildingSpawnPos, Transform buildingDestroyPos)
         {
             this.buildingSpawnPos = buildingSpawnPos;
             this.buildingDestroyPos = buildingDestroyPos;
-            this.buildingPrefab = buildingPrefab;
         }
 
         private void Start()
         {
-            buildingObjectPool = new BuildingObjectPool(buildingPrefab, this);
+            buildingObjectPool = new BuildingObjectPool( this, buildingsList);
             SpawnInitialBuilding();
             isPaused = true;
             moveSpeed = initMoveSpeed;
@@ -51,7 +52,7 @@ namespace Assets.Scripts.Level
         {
             foreach (var pooledItem in buildingObjectPool.pooledItems)
             {
-                var building = pooledItem.item;
+                var building = pooledItem.Item;
                 if (pooledItem.isUsed)
                 {
                     Vector3 targetPosition = building.transform.position + (Vector3.left * moveSpeed * Time.deltaTime);
@@ -61,10 +62,14 @@ namespace Assets.Scripts.Level
                     if (building.transform.position.x <= buildingDestroyPos.position.x )
                     {
                         buildingObjectPool.ReturnItem(pooledItem);
-                        ConfigureBuilding(buildingObjectPool.GetBuilding(), buildingSpawnPos);
+                        ConfigureBuilding(buildingObjectPool.GetItem(GetRandomBuilding()), buildingSpawnPos);
                     }
                 }
             }
+        }
+        private BuildingType GetRandomBuilding()
+        {
+            return buildingsList[Random.Range(0, buildingsList.Count)].buildingType;
         }
 
         private void IncreaseSpeedOverTime()
@@ -79,7 +84,7 @@ namespace Assets.Scripts.Level
             for (int i = 0; i < initialBuildingCount ; i++)
             {
                 if(i!=0)buildingSpawnPos.position = new Vector3(buildingSpawnPos.position.x+10, buildingSpawnPos.position.y,buildingSpawnPos.position.z );
-                ConfigureBuilding(buildingObjectPool.GetItem(), buildingSpawnPos);
+                ConfigureBuilding(buildingObjectPool.GetItem(GetRandomBuilding()), buildingSpawnPos);
             }
         }
 

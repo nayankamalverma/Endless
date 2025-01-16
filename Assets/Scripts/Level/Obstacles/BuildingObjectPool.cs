@@ -1,25 +1,29 @@
 ﻿using Assets.Scripts.Utilities;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Scripts.Level
 {
-	public class BuildingObjectPool : ObjectPool
+	public class BuildingObjectPool : GenericObjectPool<BuildingType>
 	{
-        private GameObject buildingPrefab;
-        private BuildingController buildingController;
+		private BuildingController buildingController;
+		private List<BuildingScriptableObjects> buildingsList;
 
-        public BuildingObjectPool(GameObject buildingPrefab, BuildingController buildingController)
+		public BuildingObjectPool( BuildingController buildingController, List<BuildingScriptableObjects> buildingsList)
+		{
+			this.buildingController = buildingController;
+			this.buildingsList = buildingsList;
+		}
+
+        protected override GameObject CreateItem(BuildingType buildingType)
         {
-            this.buildingPrefab = buildingPrefab;
-            this.buildingController = buildingController;
+            return GameObject.Instantiate(GetPrefab(buildingType), buildingController.gameObject.transform);
         }
 
-        public GameObject GetBuilding() => GetItem();
 
-
-        protected override GameObject CreateItem()
+        private GameObject GetPrefab(BuildingType buildingType)
         {
-            return GameObject.Instantiate(buildingPrefab,buildingController.gameObject.transform);
+            return buildingsList.Find(i => i.buildingType == buildingType).prefab;
         }
     }
 }
