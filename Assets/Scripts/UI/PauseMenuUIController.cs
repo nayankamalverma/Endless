@@ -32,5 +32,10 @@ namespace Assets.Scripts.UI
         {
             this.eventService = eventService;
         }
+        private void OnDestroy()
+        {
+            resumeButton.onClick.RemoveListener(OnResumeButtonClicked);
+            EndGameButton.onClick.RemoveListener(OnEndGameButtonClicked);
+        }
     }
 }

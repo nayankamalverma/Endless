@@ -8,13 +8,26 @@ public class LevelService
     private ObstaclesController obstaclesController;
     private EventService eventService;
 
-    public LevelService( EventService eventService,BuildingController buildingController , Transform buildingSpawnPos, Transform buildingDestroyPos, ObstaclesController obstaclesController)
+    private float initMoveSpeed;
+    private float speedIncreaseRate;
+    private float moveSpeed;
+    
+    public LevelService( EventService eventService,float initMoveSpeed, float speedIncreaseRate, BuildingController buildingController ,ObstaclesController obstaclesController)
     {
         this.eventService = eventService;
+        this.initMoveSpeed = initMoveSpeed;
+        this.speedIncreaseRate = speedIncreaseRate;
         this.buildingController = buildingController;
         this.obstaclesController = obstaclesController;
-        buildingController.SetReferences(  buildingSpawnPos, buildingDestroyPos);
+        buildingController.SetReferences(this);
+        obstaclesController.SetReferences(this);
         AddEventListeners();
+        moveSpeed = initMoveSpeed;
+    }
+
+    public void Update()
+    {
+        IncreaseSpeedOverTime();
     }
 
     private void AddEventListeners()
@@ -26,10 +39,12 @@ public class LevelService
         eventService.OnGameEnd.AddListener(OnGameEnd);
     }
 
+
     private void OnGameStart()
     {
         buildingController.OnGameStart();
         obstaclesController.OnGameStart();
+        moveSpeed = initMoveSpeed;
     }
 
     private void OnGamePause()
@@ -54,6 +69,14 @@ public class LevelService
         buildingController.OnMainMenuButtonClicked();
         obstaclesController.OnMainMenuButtonClicked();
     }
+
+
+    private void IncreaseSpeedOverTime()
+    {
+        if (moveSpeed < 30) moveSpeed += speedIncreaseRate * Time.deltaTime;
+    }
+
+    public float GetMoveSpeed() => moveSpeed; 
 
     public void OnDestroy()
     {

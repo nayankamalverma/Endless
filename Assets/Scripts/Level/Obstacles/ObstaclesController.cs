@@ -11,23 +11,19 @@ namespace Assets.Scripts.Level
         [SerializeField] List<ObstacleScriptableObject> obstaclesList;
         [SerializeField] private Transform obstacleSpawnPos;
         [SerializeField] private Transform destroyPos;
-
-
-        [SerializeField] private float initMoveSpeed = 0.2f;
-        [SerializeField] private float speedIncreaseRate = 0.01f;
-        [SerializeField] private float moveSpeed;
-
         [SerializeField] private float spawnRate = 3f;
 
-        public float spawnTime;
-        public bool isPaused;
+        private float spawnTime;
+        private bool isPaused;
         private ObstacleObjectPool obstaclePool;
+        private LevelService levelService;
+
+        public void SetReferences(LevelService levelService) { this.levelService = levelService; }
 
         private void Start()
         {
             obstaclePool = new ObstacleObjectPool(this,obstaclesList);
             isPaused = true;
-            moveSpeed = initMoveSpeed;
             spawnTime = 0;
         }
         
@@ -37,7 +33,6 @@ namespace Assets.Scripts.Level
             {
                 SpawnObstacles();
                 MoveObstacles();
-                IncreaseSpeedOverTime();
             }
         }
 
@@ -45,7 +40,6 @@ namespace Assets.Scripts.Level
         {
             obstaclePool.ReturnAllItem();
             isPaused = false;
-            moveSpeed = initMoveSpeed;
         }
 
         public void OnMainMenuButtonClicked()
@@ -78,7 +72,7 @@ namespace Assets.Scripts.Level
                 var obj = pooledItem.Item;
                 if (pooledItem.isUsed)
                 {
-                    Vector3 targetPosition = obj.transform.position + (Vector3.left * moveSpeed * Time.deltaTime);
+                    Vector3 targetPosition = obj.transform.position + (Vector3.left * levelService.GetMoveSpeed() * Time.deltaTime);
 
                     obj.transform.position = Vector3.Lerp(obj.transform.position, targetPosition, 0.5f);
 
@@ -90,11 +84,6 @@ namespace Assets.Scripts.Level
             }
         }
 
-        private void IncreaseSpeedOverTime()
-        {
-            if (moveSpeed < 30) moveSpeed += speedIncreaseRate * Time.deltaTime;
-        }
-
         private ObstacleType GetRandomObstacle()
         {
             return obstaclesList[Random.Range(0, obstaclesList.Count)].obstacleType;
@@ -104,6 +93,5 @@ namespace Assets.Scripts.Level
         {
             this.isPaused = isPaused;
         }
-
     }
 }

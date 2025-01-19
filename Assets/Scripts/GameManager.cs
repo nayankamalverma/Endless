@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Assets.Scripts.Collectibles;
 using Assets.Scripts.Events;
 using Assets.Scripts.Level;
@@ -14,8 +13,8 @@ namespace Assets.Scripts
         //LevelService
         [SerializeField] private BuildingController buildingController;
         [SerializeField] private int initialBUildingCount = 8;
-        [SerializeField] private Transform buildingSpawnPos;
-        [SerializeField] private Transform buildingDestroyPos;
+        [SerializeField] private float initMoveSpeed = 4f;
+        [SerializeField] private float speedIncreaseRate = 0.05f;
 
         [SerializeField] private ObstaclesController obstaclesController;
 
@@ -37,12 +36,17 @@ namespace Assets.Scripts
         private void Awake()
         {
             EventService = new EventService();
-            LevelService = new LevelService( EventService,buildingController, buildingSpawnPos, buildingDestroyPos, obstaclesController);
+            LevelService = new LevelService( EventService, initMoveSpeed, speedIncreaseRate, buildingController,  obstaclesController);
             PlayerService = new PlayerService(EventService, playerController);
 
             UIService.SetServices(EventService);
             ScoreService.SetService(EventService);
             CoinService.SetService(EventService);
+        }
+
+        private void Update()
+        {
+            LevelService.Update();
         }
 
         private void OnDestroy()
