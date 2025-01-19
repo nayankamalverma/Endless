@@ -1,5 +1,4 @@
-﻿using Assets.Scripts.Utilities;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Scripts.Level
@@ -8,20 +7,17 @@ namespace Assets.Scripts.Level
     {
 
         [SerializeField]private List<BuildingScriptableObjects> buildingsList;
-        private Transform buildingSpawnPos;
-        private Transform buildingDestroyPos;
         [SerializeField] private int initialBuildingCount=8;
-        [SerializeField] private float initMoveSpeed = 0.2f;
-        [SerializeField] private float speedIncreaseRate = 0.01f;
-        [SerializeField] private bool isPaused;
+        [SerializeField] private Transform buildingSpawnPos;
+        [SerializeField] private Transform buildingDestroyPos;
 
-        [SerializeField]private float moveSpeed;
         BuildingObjectPool buildingObjectPool;
+        private LevelService levelService;
+        private bool isPaused;
 
-        public void SetReferences( Transform buildingSpawnPos, Transform buildingDestroyPos)
+        public void SetReferences(LevelService levelService)
         {
-            this.buildingSpawnPos = buildingSpawnPos;
-            this.buildingDestroyPos = buildingDestroyPos;
+            this.levelService = levelService;
         }
 
         private void Start()
@@ -29,7 +25,6 @@ namespace Assets.Scripts.Level
             buildingObjectPool = new BuildingObjectPool( this, buildingsList);
             SpawnInitialBuilding();
             isPaused = true;
-            moveSpeed = initMoveSpeed;
         }
 
         public void OnGameStart()
@@ -37,14 +32,12 @@ namespace Assets.Scripts.Level
             buildingObjectPool.ReturnAllItem();
             SpawnInitialBuilding();
             isPaused = false;
-            moveSpeed = initMoveSpeed;
         }
 
         private void Update()
         {
             if (!isPaused) {
                 MoveBuildings();
-                IncreaseSpeedOverTime();
             }
         }
 
@@ -55,7 +48,7 @@ namespace Assets.Scripts.Level
                 var building = pooledItem.Item;
                 if (pooledItem.isUsed)
                 {
-                    Vector3 targetPosition = building.transform.position + (Vector3.left * moveSpeed * Time.deltaTime);
+                    Vector3 targetPosition = building.transform.position + (Vector3.left * levelService.GetMoveSpeed() * Time.deltaTime);
 
                     building.transform.position = Vector3.Lerp(building.transform.position, targetPosition, 0.5f);
 
@@ -71,12 +64,6 @@ namespace Assets.Scripts.Level
         {
             return buildingsList[Random.Range(0, buildingsList.Count)].buildingType;
         }
-
-        private void IncreaseSpeedOverTime()
-        {
-            if(moveSpeed<60)moveSpeed += speedIncreaseRate * Time.deltaTime;
-        }
-
 
         private void SpawnInitialBuilding()
         {
@@ -105,6 +92,5 @@ namespace Assets.Scripts.Level
             buildingObjectPool.ReturnAllItem();
             SpawnInitialBuilding();
         }
-
     }
 }

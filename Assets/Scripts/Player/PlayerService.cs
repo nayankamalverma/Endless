@@ -45,8 +45,6 @@ namespace Assets.Scripts.Player
             playerController.ResetPlayer();
         }
 
-
-
         public void OnDestroy()
         {
             eventService.OnGameStart.RemoveListener(OnGameStart);

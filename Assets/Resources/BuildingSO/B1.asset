@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: B1
   m_EditorClassIdentifier: 
   buildingType: 0
-  prefab: {fileID: 7846413892721112965, guid: bd0038a546fef6d46b7702f47a75eba0, type: 3}
+  prefab: {fileID: 7846413892721112965, guid: 447661cbbebd34043b5dae55db4a888c, type: 3}
